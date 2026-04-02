@@ -1,8 +1,16 @@
 version: "3.9"
+
 services:
   web:
-    ports:
-      - 5000:5000
+    build: .  # Tells Docker to use your Dockerfile to build the image
     image: build-status-dashboard
+    ports:
+      - "5000:5000"
 
-
+  test_app:
+    build: .  # Uses the same Dockerfile
+    image: build-status-dashboard-test
+    depends_on:
+      - web
+    # Override the default startup command to run your test suite instead
+    command: python -m pytest  # Or your specific test command (npm test, etc.)

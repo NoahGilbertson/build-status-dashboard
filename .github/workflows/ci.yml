@@ -1,0 +1,23 @@
+name: build-test-dashboard
+
+on: [push, pull_request]  # Fixed: "pushn" to "push" and "pull-request" to "pull_request"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code  # Fixed: Added space after the hyphen
+        uses: actions/checkout@v4
+
+      - name: Set up docker Buildx
+        uses: docker/setup-buildx-action@v3 # Fixed: Removed trailing single quote
+
+      - name: Build and run tests
+        run: |
+          # Note: Modern runners support 'docker compose' (no hyphen)
+          docker compose up --build --exit-code-from test_app
+
+      - name: Shut down containers
+        if: always()
+        run: docker compose down
