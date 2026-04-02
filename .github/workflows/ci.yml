@@ -1,8 +1,16 @@
 name: build-test-dashboard
 
-on: [push, pull_request]  # Fixed: "pushn" to "push" and "pull-request" to "pull_request"
+on: [push, pull_request]  
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: run Ruff
+      - uses: astral-sh/ruff-action@v1
+
   build-and-test:
     runs-on: ubuntu-latest
 
@@ -21,3 +29,5 @@ jobs:
       - name: Shut down containers
         if: always()
         run: docker compose down
+
+  
